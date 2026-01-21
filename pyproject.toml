@@ -7,4 +7,5 @@ dependencies = [
     "flet[all]>=0.80.2",
     "pytest>=9.0.2",
     "pyyaml>=6.0.3",
+    "pyinstaller>=6.11.1",
 ]
