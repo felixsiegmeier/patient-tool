@@ -1,0 +1,32 @@
+name: Build Windows EXE
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Build EXE
+        run: |
+          uv run flet pack main.py --name "PatientenTool"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PatientenTool-Windows
+          path: dist/*.exe
