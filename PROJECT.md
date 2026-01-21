@@ -16,7 +16,6 @@
 
 # GUI Struktur
 ## Sidebar (Links)
-- **Branding:** App-Logo (`logo.png`) oben zentriert.
 - Scrollbar, falls Liste zu lang.
 - "Add Patient" Button.
 - Link zur Startseite ("Übersicht").

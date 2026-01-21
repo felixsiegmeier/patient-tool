@@ -56,16 +56,6 @@ def main(page: ft.Page):
             )
         
         fixed_items = [
-            ft.Container(
-                content=ft.Image(
-                    src=get_resource_path("logo.png"),
-                    width=100,
-                    height=100,
-                    fit=ft.BoxFit.CONTAIN,
-                ),
-                alignment=ft.Alignment.CENTER,
-                padding=10,
-            ),
             create_sidebar_item(ft.Icons.HOME, "Übersicht", lambda _: navigate_to("home")),
             ft.Divider(),
             create_sidebar_item(ft.Icons.ADD, "Patient hinzufügen", lambda _: add_new_patient()),
