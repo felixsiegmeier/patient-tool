@@ -47,8 +47,11 @@ def get_export_view(page: ft.Page, dm: DataManager, on_navigate: Callable):
             full_text.append("-" * 40)
         
         export_preview.value = "\n".join(full_text)
-        if export_preview.page:
-            export_preview.update()
+        try:
+            if export_preview.page:
+                export_preview.update()
+        except Exception:
+            pass
 
     def on_patient_toggle(pid, val):
         selected_patients[pid] = val

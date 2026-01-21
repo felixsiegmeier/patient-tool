@@ -1,6 +1,7 @@
 import flet as ft
 import os
 from data_manager import DataManager, Patient
+from utils import get_resource_path
 from components.sidebar import Sidebar
 from components.dialogs import open_quick_add_dialog
 from views.home_view import get_home_view
@@ -13,7 +14,7 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
     page.window.width = 1200
     page.window.height = 800
-    page.window.icon = "logo.png"
+    page.window.icon = get_resource_path("logo.png")
     
     # Data Manager initialisieren
     dm = DataManager("patients.yaml")

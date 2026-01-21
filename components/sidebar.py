@@ -25,7 +25,11 @@ class Sidebar(ft.Column):
         
         def on_sidebar_hover(e, container):
             container.bgcolor = ft.Colors.BLACK12 if e.data == "true" else None
-            container.update()
+            try:
+                if container.page:
+                    container.update()
+            except Exception:
+                pass
 
         def create_sidebar_item(icon_name, text, on_tap_handler):
             c = ft.Container(
@@ -63,5 +67,10 @@ class Sidebar(ft.Column):
             
         self.sidebar_fixed.controls = fixed_items
         self.sidebar_scrollable.controls = patient_items
-        if self.page:
-            self.update()
+        
+        # Nur updaten, wenn das Control bereits auf der Seite aktiv ist
+        try:
+            if self.page:
+                self.update()
+        except Exception:
+            pass

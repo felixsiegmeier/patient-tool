@@ -50,8 +50,11 @@ def get_home_view(dm: DataManager, on_navigate: Callable, on_quick_add: Callable
             )
             rows.append(c)
         patient_list_container.controls = rows
-        if patient_list_container.page:
-            patient_list_container.update()
+        try:
+            if patient_list_container.page:
+                patient_list_container.update()
+        except Exception:
+            pass
 
     def toggle_hide(patient: Patient):
         patient.hidden = not patient.hidden
