@@ -53,6 +53,10 @@
 - Checkbox-Liste der Parameter (Default: Name, Diagnosen, Operationen, Kardiale Funktion, Antiinfektiva).
 - Output-Feld: Read-only Textfeld mit dem generierten Plain-Text.
   - Formatierung: Strukturiert und eingerückt (YAML-Stil), optimiert für Druck/Copy-Paste.
+- **Direktdruck (PDF):** Button zum Generieren einer A4-PDF.
+  - Schriftgröße 10pt.
+  - Seitenumbrüche werden so gesteuert, dass Patientenblöcke möglichst nicht zerrissen werden.
+  - Automatisches Öffnen der PDF nach Erstellung.
 
 # Technische Details
 - **Build:** PyInstaller/Flet Pack via GitHub Actions für Windows.

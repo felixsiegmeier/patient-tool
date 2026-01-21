@@ -1,7 +1,9 @@
 import flet as ft
 from data_manager import DataManager, Patient
-from utils import get_current_date_prefix, format_patient_export
+from utils import get_current_date_prefix, format_patient_export, create_patient_pdf
 import uuid
+import os
+from datetime import datetime
 
 def main(page: ft.Page):
     page.title = "Patienten Übersicht"
@@ -254,6 +256,37 @@ def main(page: ft.Page):
             snack_bar.open = True
             page.update()
 
+        def print_to_pdf(_):
+            included_patients = [p for p in dm.patients if selected_patients.get(p.id)]
+            sorted_p = dm.sort_patients(included_patients)
+            included_fields = [k for k, v in selected_fields.items() if v]
+            
+            from data_manager import get_resource_path
+            filename = f"Patienten_Export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+            filepath = get_resource_path(filename)
+            
+            try:
+                create_patient_pdf(sorted_p, included_fields, filepath)
+                if os.name == 'nt':
+                    os.startfile(filepath)
+                else:
+                    import subprocess
+                    try:
+                        cmd = ['open', filepath] if os.uname().sysname == 'Darwin' else ['xdg-open', filepath]
+                        subprocess.run(cmd)
+                    except:
+                        pass # Fallback falls open/xdg-open nicht da
+                
+                snack_bar = ft.SnackBar(ft.Text(f"PDF erstellt: {filename}"))
+                page.overlay.append(snack_bar)
+                snack_bar.open = True
+                page.update()
+            except Exception as ex:
+                snack_bar = ft.SnackBar(ft.Text(f"Fehler beim PDF-Export: {str(ex)}"))
+                page.overlay.append(snack_bar)
+                snack_bar.open = True
+                page.update()
+
         selection_tile = ft.ExpansionTile(
             title=ft.Text("Patienten & Parameter auswählen", weight=ft.FontWeight.BOLD),
             expanded=False,
@@ -270,6 +303,7 @@ def main(page: ft.Page):
         )
 
         copy_btn = ft.IconButton(ft.Icons.COPY, on_click=copy_to_clipboard, tooltip="In Zwischenablage kopieren")
+        print_btn = ft.IconButton(ft.Icons.PRINT, on_click=print_to_pdf, tooltip="Als A4-PDF drucken")
 
         back_btn_export = ft.IconButton(ft.Icons.ARROW_BACK, on_click=lambda _: navigate_to("home"))
 
@@ -280,8 +314,8 @@ def main(page: ft.Page):
             ]),
             selection_tile,
             ft.Row([
-                ft.Text("3. Ergebnis (Copy-Paste)", weight=ft.FontWeight.BOLD),
-                copy_btn
+                ft.Text("3. Ergebnis (Copy-Paste / Drucken)", weight=ft.FontWeight.BOLD),
+                ft.Row([copy_btn, print_btn])
             ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             export_text
         ], expand=True, scroll=ft.ScrollMode.AUTO, horizontal_alignment=ft.CrossAxisAlignment.STRETCH)
