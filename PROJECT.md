@@ -59,6 +59,8 @@
   - Automatisches Öffnen der PDF nach Erstellung.
 
 # Technische Details
+- **Architektur:** Modularer Aufbau (Main, Data, Utils, Components, Views).
+- **Datenmodell:** Pydantic Models für Validierung und Typsicherheit.
 - **Build:** PyInstaller/Flet Pack via GitHub Actions für Windows.
-- **Sortierlogik:** Alphabetisch nach Station, dann Bettplatz.
-- **Suche:** Filtert die Liste der Startseite in Echtzeit. Ausgeblendete Patienten werden bei Treffern wieder eingeblendet (Option zur Re-Aktivierung).
+- **Sortierlogik:** Alphabetisch nach Station, dann Bettplatz (natürliche Sortierung).
+- **Suche:** Filtert die Liste der Startseite in Echtzeit. Ausgeblendete Patienten werden bei Treffern wieder eingeblendet.

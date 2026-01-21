@@ -1,5 +1,27 @@
+import os
+import sys
+import re
 from datetime import datetime
 from fpdf import FPDF
+
+def get_resource_path(filename):
+    if getattr(sys, 'frozen', False):
+        # Wenn die App als EXE läuft
+        if hasattr(sys, '_MEIPASS'):
+            # Interne Ressource (z.B. Logo)
+            internal_path = os.path.join(sys._MEIPASS, filename)
+            if os.path.exists(internal_path):
+                return internal_path
+        # Externe Datei neben der EXE (z.B. patients.yaml)
+        base_path = os.path.dirname(sys.executable)
+    else:
+        # Wenn die App als Skript läuft
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_path, filename)
+
+def natural_sort_key(s):
+    return [int(text) if text.isdigit() else text.lower()
+            for text in re.split('([0-9]+)', s)]
 
 def get_current_date_prefix():
     return f"[{datetime.now().strftime('%d.%m.')}]"
