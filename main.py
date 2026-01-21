@@ -61,7 +61,7 @@ def main(page: ft.Page):
                     src=get_resource_path("logo.png"),
                     width=100,
                     height=100,
-                    fit=ft.ImageFit.CONTAIN,
+                    fit=ft.BoxFit.CONTAIN,
                 ),
                 alignment=ft.alignment.center,
                 padding=10,
