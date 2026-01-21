@@ -12,6 +12,12 @@ def natural_sort_key(s):
 def get_resource_path(filename):
     if getattr(sys, 'frozen', False):
         # Wenn die App als EXE läuft
+        if hasattr(sys, '_MEIPASS'):
+            # Interne Ressource (z.B. Logo)
+            internal_path = os.path.join(sys._MEIPASS, filename)
+            if os.path.exists(internal_path):
+                return internal_path
+        # Externe Datei neben der EXE (z.B. patients.yaml)
         base_path = os.path.dirname(sys.executable)
     else:
         # Wenn die App als Skript läuft

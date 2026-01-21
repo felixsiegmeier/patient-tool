@@ -1,5 +1,5 @@
 import flet as ft
-from data_manager import DataManager, Patient
+from data_manager import DataManager, Patient, get_resource_path
 from utils import get_current_date_prefix, format_patient_export, create_patient_pdf
 import uuid
 import os
@@ -10,6 +10,7 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
     page.window.width = 1200
     page.window.height = 800
+    page.window.icon = get_resource_path("logo.png")
     
     # Data Manager initialisieren
     # In einer EXE Umgebung sollte der Pfad relativ zur EXE sein
@@ -55,6 +56,16 @@ def main(page: ft.Page):
             )
         
         fixed_items = [
+            ft.Container(
+                content=ft.Image(
+                    src=get_resource_path("logo.png"),
+                    width=100,
+                    height=100,
+                    fit=ft.ImageFit.CONTAIN,
+                ),
+                alignment=ft.alignment.center,
+                padding=10,
+            ),
             create_sidebar_item(ft.Icons.HOME, "Übersicht", lambda _: navigate_to("home")),
             ft.Divider(),
             create_sidebar_item(ft.Icons.ADD, "Patient hinzufügen", lambda _: add_new_patient()),
