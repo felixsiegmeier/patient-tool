@@ -63,7 +63,7 @@ def main(page: ft.Page):
                     height=100,
                     fit=ft.BoxFit.CONTAIN,
                 ),
-                alignment=ft.alignment.center,
+                alignment=ft.Alignment.CENTER,
                 padding=10,
             ),
             create_sidebar_item(ft.Icons.HOME, "Übersicht", lambda _: navigate_to("home")),
