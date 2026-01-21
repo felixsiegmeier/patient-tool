@@ -10,7 +10,7 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
     page.window.width = 1200
     page.window.height = 800
-    page.window.icon = get_resource_path("logo.png")
+    page.window.icon = "logo.png"
     
     # Data Manager initialisieren
     # In einer EXE Umgebung sollte der Pfad relativ zur EXE sein
@@ -385,4 +385,5 @@ def main(page: ft.Page):
     update_view()
 
 if __name__ == "__main__":
-    ft.run(main)
+    assets_path = os.path.dirname(os.path.abspath(__file__))
+    ft.run(main, assets_dir=assets_path)
