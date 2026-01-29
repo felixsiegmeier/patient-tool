@@ -9,9 +9,10 @@
 - **Speicherung:** Automatisch (Autosave) bei Feldänderungen oder via "Hinzufügen" im Quick-Add.
 - **YAML-Struktur:** 
   - Jeder Patient erhält eine eindeutige, versteckte `id` (UUID).
-  - Felder: Name, Station, Bettplatz, Diagnosen, Operationen, Kardiale Funktion, Antiinfektiva, Diagnostik, Verlauf, Probleme/Aufgaben.
+  - Felder: Name, Bettplatz, Diagnosen, Operationen, Kardiale Funktion, Antiinfektiva, Diagnostik, Verlauf, Probleme/Aufgaben.
   - Status: `hidden` (boolean).
 - **Dateipfad:** Relativ zur EXE im gleichen Ordner. Falls nicht vorhanden -> initial erstellen.
+- **Migration:** Abwärtskompatibilität für ältere `patients.yaml` ist gewährleistet. Das entfernte Feld `station` wird beim ersten Laden automatisch in das Feld `bettplatz` migriert, um Datenverlust zu vermeiden.
 - **Handling:** Zeilenumbrüche in Multi-line-Feldern werden technisch sauber (YAML Block Scalars) gespeichert.
 
 # GUI Struktur
@@ -25,8 +26,8 @@
 ## Startseite (Zentral)
 - **Suche:** Suchfeld, um Patienten (auch ausgeblendete) zu finden.
 - **Patienten-Liste:** Alle Patienten untereinander.
-  - Sortierung: Alphabetisch nach Station, dann numerisch/alphabetisch nach Bettplatz.
-  - Pro Zeile: Patientenname + Station/Bett.
+  - Sortierung: Numerisch/alphabetisch nach Bettplatz.
+  - Pro Zeile: Patientenname + Bettplatz.
   - Buttons pro Patient: 
     - "Hide" (setzt Status auf hidden, entfernt ihn aus Sidebar/Standardliste).
     - "Quick Add" (Grünes Plus-Icon).
@@ -36,7 +37,6 @@
 - Formular mit allen Feldern aus dem Datenmodell.
 - Textfelder:
   - Name (Multi-line)
-  - Station (Single-line)
   - Bettplatz (Single-line)
   - Alle weiteren (Multi-line)
 - Änderungen werden per Autosave direkt in die YAML geschrieben.
@@ -62,5 +62,5 @@
 - **Architektur:** Modularer Aufbau (Main, Data, Utils, Components, Views).
 - **Datenmodell:** Pydantic Models für Validierung und Typsicherheit.
 - **Build:** PyInstaller/Flet Pack via GitHub Actions für Windows.
-- **Sortierlogik:** Alphabetisch nach Station, dann Bettplatz (natürliche Sortierung).
+- **Sortierlogik:** Bettplatz (natürliche Sortierung).
 - **Suche:** Filtert die Liste der Startseite in Echtzeit. Ausgeblendete Patienten werden bei Treffern wieder eingeblendet.

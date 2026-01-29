@@ -12,9 +12,16 @@ def open_quick_add_dialog(page: ft.Page, dm: DataManager, patient_id: str):
         ft.Radio(value="diagnosen", label="Diagnosen"),
         ft.Radio(value="diagnostik", label="Diagnostik"),
         ft.Radio(value="probleme_aufgaben", label="Probleme/Aufgaben"),
-    ]), value="verlauf")
+    ], spacing=0), value="verlauf")
     
-    text_input = ft.TextField(label="Information", multiline=True, autofocus=True)
+    text_input = ft.TextField(
+        label="Information", 
+        multiline=True, 
+        autofocus=True,
+        text_size=13,
+        label_style=ft.TextStyle(size=12),
+        dense=True
+    )
     
     def save_quick_add(_):
         if not text_input.value:
@@ -30,12 +37,12 @@ def open_quick_add_dialog(page: ft.Page, dm: DataManager, patient_id: str):
         page.pop_dialog()
 
     dialog = ft.AlertDialog(
-        title=ft.Text(f"Quick Add für {patient.name}"),
+        title=ft.Text(f"Quick Add für {patient.name}", size=16, weight=ft.FontWeight.BOLD),
         content=ft.Column([
-            ft.Text("Zielbereich:"),
+            ft.Text("Zielbereich:", size=12),
             target_field,
             text_input
-        ], tight=True),
+        ], tight=True, spacing=10),
         actions=[
             ft.TextButton("Abbrechen", on_click=lambda _: page.pop_dialog()),
             ft.TextButton("Hinzufügen", on_click=save_quick_add)

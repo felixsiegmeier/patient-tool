@@ -36,13 +36,13 @@ def main(page: ft.Page):
 
     # UI Komponenten
     sidebar = Sidebar(dm, on_navigate=navigate_to, on_add_patient=add_new_patient)
-    content_area = ft.Container(expand=True, padding=20)
+    content_area = ft.Container(expand=True, padding=15)
     
     layout = ft.Row([
-        ft.Container(sidebar, bgcolor=ft.Colors.SURFACE_CONTAINER, padding=10),
+        ft.Container(sidebar, bgcolor=ft.Colors.SURFACE_CONTAINER, padding=5),
         ft.VerticalDivider(width=1),
         content_area
-    ], expand=True)
+    ], expand=True, spacing=0)
 
     def update_view():
         view_name = page.session.store.get("current_view") or "home"

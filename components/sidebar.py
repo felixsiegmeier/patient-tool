@@ -16,7 +16,7 @@ class Sidebar(ft.Column):
             self.sidebar_fixed,
             self.sidebar_scrollable
         ]
-        self.width = 250
+        self.width = 220
         self.update_sidebar()
 
     def update_sidebar(self):
@@ -34,11 +34,11 @@ class Sidebar(ft.Column):
         def create_sidebar_item(icon_name, text, on_tap_handler):
             c = ft.Container(
                 content=ft.Row([
-                    ft.Icon(icon_name, size=20) if icon_name else ft.Container(),
-                    ft.Text(text, size=14)
-                ]),
-                padding=ft.padding.symmetric(vertical=5, horizontal=10),
-                border_radius=10,
+                    ft.Icon(icon_name, size=18) if icon_name else ft.Container(),
+                    ft.Text(text, size=13)
+                ], spacing=10),
+                padding=ft.padding.symmetric(vertical=3, horizontal=8),
+                border_radius=8,
             )
             c.on_hover = lambda e: on_sidebar_hover(e, c)
             return ft.GestureDetector(
@@ -60,7 +60,7 @@ class Sidebar(ft.Column):
             patient_items.append(
                 create_sidebar_item(
                     None, 
-                    f"{p.name} ({p.station}/{p.bettplatz})", 
+                    f"{p.name} ({p.bettplatz})", 
                     lambda _, pid=p.id: self.on_navigate("patient", pid)
                 )
             )

@@ -29,11 +29,27 @@ def get_current_date_prefix():
 def format_patient_export(patient, fields_to_include):
     lines = []
     lines.append(f"Name: {patient.name}")
-    if "station" in fields_to_include:
-        lines.append(f"  Station: {patient.station}")
     if "bettplatz" in fields_to_include:
         lines.append(f"  Bettplatz: {patient.bettplatz}")
     
+    # Neue Checkbox-Felder
+    medical_fields = {
+        "invasive_beatmung": "Beatmung",
+        "niv": "NIV",
+        "hfnc": "HFNC",
+        "crrt": "CRRT",
+        "ecmo": "ECMO",
+        "impella": "Impella"
+    }
+    
+    active_supports = []
+    for key, label in medical_fields.items():
+        if getattr(patient, key, False):
+            active_supports.append(label)
+    
+    if active_supports and "unterstuetzung" in fields_to_include:
+        lines.append(f"  Unterstützung: {', '.join(active_supports)}")
+
     field_mapping = {
         "diagnosen": "Diagnosen",
         "operationen": "Operationen",

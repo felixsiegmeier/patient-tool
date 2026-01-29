@@ -1,14 +1,13 @@
 import yaml
 import os
 import uuid
-from typing import List, Optional
-from pydantic import BaseModel, Field
+from typing import List, Optional, Any
+from pydantic import BaseModel, Field, model_validator
 from utils import get_resource_path, natural_sort_key
 
 class Patient(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str = ""
-    station: str = ""
     bettplatz: str = ""
     diagnosen: str = ""
     operationen: str = ""
@@ -18,6 +17,25 @@ class Patient(BaseModel):
     verlauf: str = ""
     probleme_aufgaben: str = ""
     hidden: bool = False
+    # Neue Felder für medizinische Unterstützung
+    invasive_beatmung: bool = False
+    niv: bool = False
+    hfnc: bool = False
+    crrt: bool = False
+    ecmo: bool = False
+    impella: bool = False
+
+    @model_validator(mode='before')
+    @classmethod
+    def migrate_station(cls, data: Any) -> Any:
+        if isinstance(data, dict) and "station" in data and data["station"]:
+            station = data.pop("station")
+            bettplatz = data.get("bettplatz", "")
+            if station and station not in bettplatz:
+                # Kombiniere Station und Bettplatz, falls Station vorhanden war
+                # Wir nutzen ein Leerzeichen als Trenner
+                data["bettplatz"] = f"{station} {bettplatz}".strip()
+        return data
 
 class DataManager:
     def __init__(self, filename: str = "patients.yaml"):
@@ -67,16 +85,16 @@ class DataManager:
         return [p for p in self.patients if not p.hidden]
 
     def search_patients(self, query: str) -> List[Patient]:
-        """Sucht Patienten nach Name oder Station (case-insensitive)."""
+        """Sucht Patienten nach Name (case-insensitive)."""
         query = query.lower()
         return [
             p for p in self.patients 
-            if query in p.name.lower() or query in p.station.lower()
+            if query in p.name.lower()
         ]
 
     def sort_patients(self, patients_list: List[Patient]) -> List[Patient]:
-        """Sortiert Patienten nach Station und Bettplatz (natürliche Sortierung)."""
+        """Sortiert Patienten nach Bettplatz (natürliche Sortierung)."""
         return sorted(
             patients_list, 
-            key=lambda p: (p.station.lower(), natural_sort_key(p.bettplatz))
+            key=lambda p: natural_sort_key(p.bettplatz)
         )

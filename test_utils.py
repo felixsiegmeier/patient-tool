@@ -8,12 +8,11 @@ def test_get_current_date_prefix():
     assert prefix == expected
 
 def test_format_patient_export():
-    p = Patient(name="Max Mustermann", station="ITS", bettplatz="1", diagnosen="Test")
-    fields = ["name", "station", "diagnosen"]
+    p = Patient(name="Max Mustermann", bettplatz="1", diagnosen="Test")
+    fields = ["name", "bettplatz", "diagnosen"]
     export = format_patient_export(p, fields)
     
     assert "Name: Max Mustermann" in export
-    assert "Station: ITS" in export
+    assert "Bettplatz: 1" in export
     assert "Diagnosen:" in export
     assert "Test" in export
-    assert "Bettplatz" not in export

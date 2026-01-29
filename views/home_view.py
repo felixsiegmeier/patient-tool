@@ -6,16 +6,20 @@ def get_home_view(dm: DataManager, on_navigate: Callable, on_quick_add: Callable
     search_field = ft.TextField(
         label="Patient suchen...", 
         prefix_icon=ft.Icons.SEARCH,
-        on_change=lambda e: update_patient_list(e.control.value)
+        on_change=lambda e: update_patient_list(e.control.value),
+        text_size=13,
+        label_style=ft.TextStyle(size=12),
+        dense=True
     )
     
-    export_btn = ft.Button(
+    export_btn = ft.ElevatedButton(
         "Export", 
         icon=ft.Icons.DOWNLOAD, 
-        on_click=lambda _: on_navigate("export")
+        on_click=lambda _: on_navigate("export"),
+        style=ft.ButtonStyle(padding=10)
     )
 
-    patient_list_container = ft.Column(scroll=ft.ScrollMode.AUTO, expand=True)
+    patient_list_container = ft.Column(scroll=ft.ScrollMode.AUTO, expand=True, spacing=5)
 
     def update_patient_list(query=""):
         if query:
@@ -27,6 +31,28 @@ def get_home_view(dm: DataManager, on_navigate: Callable, on_quick_add: Callable
         
         rows = []
         for p in sorted_patients:
+            # Medizinische Tags erstellen
+            medical_tags = []
+            tag_configs = [
+                ("invasive_beatmung", "Beatmung", ft.Colors.RED_700),
+                ("niv", "NIV", ft.Colors.ORANGE_700),
+                ("hfnc", "HFNC", ft.Colors.AMBER_700),
+                ("crrt", "CRRT", ft.Colors.BLUE_700),
+                ("ecmo", "ECMO", ft.Colors.PURPLE_700),
+                ("impella", "Impella", ft.Colors.PINK_700),
+            ]
+            
+            for field, label, color in tag_configs:
+                if getattr(p, field):
+                    medical_tags.append(
+                        ft.Container(
+                            content=ft.Text(label, size=10, color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
+                            bgcolor=color,
+                            padding=ft.padding.symmetric(horizontal=5, vertical=2),
+                            border_radius=5
+                        )
+                    )
+
             c = ft.Container(
                 content=ft.Row([
                     ft.IconButton(
@@ -35,16 +61,20 @@ def get_home_view(dm: DataManager, on_navigate: Callable, on_quick_add: Callable
                         tooltip="Quick Add",
                         on_click=lambda _, pid=p.id: on_quick_add(pid)
                     ),
-                    ft.Text(f"{p.name} ({p.station} / {p.bettplatz})", weight=ft.FontWeight.BOLD, expand=True),
+                    ft.Column([
+                        ft.Text(f"{p.name} ({p.bettplatz})", size=13, weight=ft.FontWeight.BOLD),
+                        ft.Row(medical_tags, spacing=5) if medical_tags else ft.Container()
+                    ], expand=True),
                     ft.IconButton(
                         icon=ft.Icons.VISIBILITY_OFF if not p.hidden else ft.Icons.VISIBILITY, 
+                        icon_size=18,
                         tooltip="Hide/Unhide",
                         on_click=lambda _, pat=p: toggle_hide(pat)
                     ),
                 ]),
-                padding=5,
+                padding=2,
                 border=ft.Border.all(1, ft.Colors.OUTLINE_VARIANT),
-                border_radius=10,
+                border_radius=8,
                 on_click=lambda _, pid=p.id: on_navigate("patient", pid),
                 ink=True
             )
@@ -66,9 +96,9 @@ def get_home_view(dm: DataManager, on_navigate: Callable, on_quick_add: Callable
     
     return ft.Column([
         ft.Row([
-            ft.Text("Patienten Übersicht", size=24, weight=ft.FontWeight.BOLD), 
+            ft.Text("Patienten Übersicht", size=20, weight=ft.FontWeight.BOLD), 
             export_btn
         ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
         search_field,
         patient_list_container
-    ], expand=True, horizontal_alignment=ft.CrossAxisAlignment.STRETCH)
+    ], expand=True, horizontal_alignment=ft.CrossAxisAlignment.STRETCH, spacing=10)
