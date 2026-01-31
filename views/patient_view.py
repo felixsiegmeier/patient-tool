@@ -30,6 +30,10 @@ def get_patient_view(dm: DataManager, patient_id: str, on_navigate: Callable, up
         ("crrt", "CRRT"),
         ("ecmo", "ECMO"),
         ("impella", "Impella"),
+        ("vasopressoren", "Vasopressoren"),
+        ("inotropika", "Inotropika"),
+        ("ihd", "iHD"),
+        ("sedierung", "Sedierung"),
     ]
 
     other_fields = [

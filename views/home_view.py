@@ -34,12 +34,20 @@ def get_home_view(dm: DataManager, on_navigate: Callable, on_quick_add: Callable
             # Medizinische Tags erstellen
             medical_tags = []
             tag_configs = [
-                ("invasive_beatmung", "Beatmung", ft.Colors.RED_700),
-                ("niv", "NIV", ft.Colors.ORANGE_700),
-                ("hfnc", "HFNC", ft.Colors.AMBER_700),
-                ("crrt", "CRRT", ft.Colors.BLUE_700),
-                ("ecmo", "ECMO", ft.Colors.PURPLE_700),
-                ("impella", "Impella", ft.Colors.PINK_700),
+                # Beatmung (Blau)
+                ("invasive_beatmung", "Beatmung", ft.Colors.BLUE_800),
+                ("niv", "NIV", ft.Colors.BLUE_800),
+                ("hfnc", "HFNC", ft.Colors.BLUE_800),
+                # Nierenersatz (Orange)
+                ("crrt", "CRRT", ft.Colors.ORANGE_800),
+                ("ihd", "iHD", ft.Colors.ORANGE_800),
+                # Kreislaufunterstützung mechanisch (Rot)
+                ("ecmo", "ECMO", ft.Colors.RED_800),
+                ("impella", "Impella", ft.Colors.RED_800),
+                # Medikamente (Grün)
+                ("vasopressoren", "Vaso", ft.Colors.GREEN_800),
+                ("inotropika", "Ino", ft.Colors.GREEN_800),
+                ("sedierung", "Sed", ft.Colors.GREEN_800),
             ]
             
             for field, label, color in tag_configs:
@@ -63,7 +71,7 @@ def get_home_view(dm: DataManager, on_navigate: Callable, on_quick_add: Callable
                     ),
                     ft.Column([
                         ft.Text(f"{p.name} ({p.bettplatz})", size=13, weight=ft.FontWeight.BOLD),
-                        ft.Row(medical_tags, spacing=5) if medical_tags else ft.Container()
+                        ft.Row(medical_tags, spacing=5, wrap=True) if medical_tags else ft.Container()
                     ], expand=True),
                     ft.IconButton(
                         icon=ft.Icons.VISIBILITY_OFF if not p.hidden else ft.Icons.VISIBILITY, 

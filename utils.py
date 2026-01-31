@@ -39,7 +39,11 @@ def format_patient_export(patient, fields_to_include):
         "hfnc": "HFNC",
         "crrt": "CRRT",
         "ecmo": "ECMO",
-        "impella": "Impella"
+        "impella": "Impella",
+        "vasopressoren": "Vasopressoren",
+        "inotropika": "Inotropika",
+        "ihd": "iHD",
+        "sedierung": "Sedierung"
     }
     
     active_supports = []
@@ -70,6 +74,31 @@ def format_patient_export(patient, fields_to_include):
     
     return "\n".join(lines)
 
+def sanitize_for_pdf(text):
+    """Ersetzt Unicode-Sonderzeichen durch PDF-kompatible ASCII-Zeichen."""
+    if not text:
+        return ""
+    
+    replacements = {
+        "\u2013": "-",    # en dash
+        "\u2014": "--",   # em dash
+        "\u2192": "->",   # right arrow
+        "\u2190": "<-",   # left arrow
+        "\u2194": "<->",  # left right arrow
+        "\u21d2": "=>",   # double right arrow
+        "\u21d0": "<=",   # double left arrow
+        "\u21d4": "<=>",  # double left right arrow
+        "\u2713": "x",    # check mark
+        "\u2022": "*",    # bullet point
+    }
+    
+    for char, replacement in replacements.items():
+        text = text.replace(char, replacement)
+    
+    # Versuche in Latin-1 zu kodieren und zu dekodieren, um verbleibende inkompatible Zeichen zu finden
+    # (FPDF Helvetica nutzt Latin-1)
+    return text.encode('latin-1', 'replace').decode('latin-1')
+
 def create_patient_pdf(patients, fields_to_include, filepath):
     pdf = FPDF()
     pdf.set_auto_page_break(auto=True, margin=15)
@@ -88,6 +117,7 @@ def create_patient_pdf(patients, fields_to_include, filepath):
     for patient in patients:
         # Text für diesen Patienten generieren
         patient_text = format_patient_export(patient, fields_to_include)
+        patient_text = sanitize_for_pdf(patient_text)
         lines = patient_text.splitlines()
         
         # Höhenberechnung

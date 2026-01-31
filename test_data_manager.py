@@ -73,7 +73,11 @@ def test_medical_fields(temp_yaml):
     p = Patient(
         name="ICU Patient", 
         invasive_beatmung=True, 
-        ecmo=True
+        ecmo=True,
+        vasopressoren=True,
+        inotropika=True,
+        ihd=True,
+        sedierung=True
     )
     dm.add_patient(p)
     
@@ -81,6 +85,10 @@ def test_medical_fields(temp_yaml):
     loaded_p = dm2.patients[0]
     assert loaded_p.invasive_beatmung is True
     assert loaded_p.ecmo is True
+    assert loaded_p.vasopressoren is True
+    assert loaded_p.inotropika is True
+    assert loaded_p.ihd is True
+    assert loaded_p.sedierung is True
     assert loaded_p.niv is False
     assert loaded_p.hfnc is False
     assert loaded_p.crrt is False

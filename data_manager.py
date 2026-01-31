@@ -24,6 +24,10 @@ class Patient(BaseModel):
     crrt: bool = False
     ecmo: bool = False
     impella: bool = False
+    vasopressoren: bool = False
+    inotropika: bool = False
+    ihd: bool = False
+    sedierung: bool = False
 
     @model_validator(mode='before')
     @classmethod
