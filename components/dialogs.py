@@ -49,3 +49,37 @@ def open_quick_add_dialog(page: ft.Page, dm: DataManager, patient_id: str):
         ]
     )
     page.show_dialog(dialog)
+
+def open_uebergabe_dialog(page: ft.Page, dm: DataManager, patient_id: str):
+    patient = dm.get_patient_by_id(patient_id)
+    if not patient:
+        return
+
+    text_input = ft.TextField(
+        label="Übergabe", 
+        value=patient.uebergabe or "",
+        multiline=True, 
+        autofocus=True,
+        text_size=13,
+        label_style=ft.TextStyle(size=12),
+        dense=True,
+        min_lines=5,
+        max_lines=15
+    )
+    
+    def save_uebergabe(_):
+        patient.uebergabe = text_input.value
+        dm.update_patient(patient)
+        page.pop_dialog()
+
+    dialog = ft.AlertDialog(
+        title=ft.Text(f"Übergabe bearbeiten: {patient.name}", size=16, weight=ft.FontWeight.BOLD),
+        content=ft.Column([
+            text_input
+        ], tight=True, width=500),
+        actions=[
+            ft.TextButton("Abbrechen", on_click=lambda _: page.pop_dialog()),
+            ft.TextButton("Speichern", on_click=save_uebergabe)
+        ]
+    )
+    page.show_dialog(dialog)

@@ -6,24 +6,27 @@ from utils import format_patient_export, create_patient_pdf, get_resource_path
 from typing import Callable
 
 def get_export_view(page: ft.Page, dm: DataManager, on_navigate: Callable):
-    all_patients = dm.patients
-    selected_patients = {p.id: (not p.hidden) for p in all_patients}
+    active_patients = dm.get_active_patients()
+    selected_patients = {p.id: True for p in active_patients}
     
     fields_config = {
         "name": "Name",
         "bettplatz": "Bettplatz",
         "unterstuetzung": "Med. Unterstützung",
         "diagnosen": "Diagnosen",
+        "nebendiagnosen": "Nebendiagnosen",
         "operationen": "Operationen",
+        "weitere_operationen": "Weitere Operationen",
         "kardiale_funktion": "Kardiale Funktion",
         "antiinfektiva": "Antiinfektiva",
         "diagnostik": "Diagnostik",
         "verlauf": "Verlauf",
-        "probleme_aufgaben": "Probleme/Aufgaben"
+        "probleme_aufgaben": "Probleme/Aufgaben",
+        "uebergabe": "Übergabe"
     }
     
     # Standardauswahl für Felder
-    default_fields = ["name", "unterstuetzung", "diagnosen", "operationen", "kardiale_funktion", "antiinfektiva"]
+    default_fields = ["name", "unterstuetzung", "diagnosen", "nebendiagnosen", "operationen", "kardiale_funktion", "antiinfektiva", "uebergabe"]
     selected_fields = {k: (k in default_fields) for k in fields_config.keys()}
 
     export_preview = ft.TextField(
@@ -107,7 +110,7 @@ def get_export_view(page: ft.Page, dm: DataManager, on_navigate: Callable):
             value=selected_patients[p.id], 
             label_style=ft.TextStyle(size=12),
             on_change=lambda e, pid=p.id: on_patient_toggle(pid, e.control.value)
-        ) for p in all_patients
+        ) for p in active_patients
     ], spacing=0)
 
     field_checks = ft.Row([
@@ -124,13 +127,16 @@ def get_export_view(page: ft.Page, dm: DataManager, on_navigate: Callable):
         expanded=False,
         controls_padding=5,
         controls=[
-            ft.Column([
-                ft.Text("1. Patienten auswählen", size=12, weight=ft.FontWeight.BOLD),
-                patient_checks,
-                ft.Divider(height=10),
-                ft.Text("2. Felder auswählen", size=12, weight=ft.FontWeight.BOLD),
-                field_checks,
-            ], spacing=5)
+            ft.Container(
+                content=ft.Column([
+                    ft.Text("1. Felder auswählen", size=12, weight=ft.FontWeight.BOLD),
+                    field_checks,
+                    ft.Divider(height=10),
+                    ft.Text("2. Patienten auswählen", size=12, weight=ft.FontWeight.BOLD),
+                    patient_checks,
+                ], spacing=5, scroll=ft.ScrollMode.ADAPTIVE),
+                height=300,
+            )
         ]
     )
 

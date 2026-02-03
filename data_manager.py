@@ -10,12 +10,15 @@ class Patient(BaseModel):
     name: str = ""
     bettplatz: str = ""
     diagnosen: str = ""
+    nebendiagnosen: str = ""
     operationen: str = ""
     kardiale_funktion: str = ""
     antiinfektiva: str = ""
     diagnostik: str = ""
     verlauf: str = ""
     probleme_aufgaben: str = ""
+    weitere_operationen: str = ""
+    uebergabe: str = ""
     hidden: bool = False
     # Neue Felder für medizinische Unterstützung
     invasive_beatmung: bool = False

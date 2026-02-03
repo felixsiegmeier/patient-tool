@@ -3,7 +3,7 @@ import os
 from data_manager import DataManager, Patient
 from utils import get_resource_path
 from components.sidebar import Sidebar
-from components.dialogs import open_quick_add_dialog
+from components.dialogs import open_quick_add_dialog, open_uebergabe_dialog
 from views.home_view import get_home_view
 from views.patient_view import get_patient_view
 from views.export_view import get_export_view
@@ -34,6 +34,9 @@ def main(page: ft.Page):
     def on_quick_add(patient_id):
         open_quick_add_dialog(page, dm, patient_id)
 
+    def on_edit_uebergabe(patient_id):
+        open_uebergabe_dialog(page, dm, patient_id)
+
     # UI Komponenten
     sidebar = Sidebar(dm, on_navigate=navigate_to, on_add_patient=add_new_patient)
     content_area = ft.Container(expand=True, padding=15)
@@ -52,6 +55,7 @@ def main(page: ft.Page):
                 dm, 
                 on_navigate=navigate_to, 
                 on_quick_add=on_quick_add,
+                on_edit_uebergabe=on_edit_uebergabe,
                 update_sidebar=sidebar.update_sidebar
             )
         elif view_name == "patient":

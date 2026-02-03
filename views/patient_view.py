@@ -38,12 +38,15 @@ def get_patient_view(dm: DataManager, patient_id: str, on_navigate: Callable, up
 
     other_fields = [
         ("diagnosen", "Diagnosen", True),
+        ("nebendiagnosen", "Nebendiagnosen", True),
         ("operationen", "Operationen", True),
+        ("weitere_operationen", "Weitere Operationen", True),
         ("kardiale_funktion", "Kardiale Funktion", True),
         ("antiinfektiva", "Antiinfektiva", True),
         ("diagnostik", "Diagnostik", True),
         ("verlauf", "Verlauf", True),
         ("probleme_aufgaben", "Probleme/Aufgaben", True),
+        ("uebergabe", "Übergabe", True),
     ]
 
     field_controls = []

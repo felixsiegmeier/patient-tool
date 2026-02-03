@@ -56,12 +56,15 @@ def format_patient_export(patient, fields_to_include):
 
     field_mapping = {
         "diagnosen": "Diagnosen",
+        "nebendiagnosen": "Nebendiagnosen",
         "operationen": "Operationen",
+        "weitere_operationen": "Weitere Operationen",
         "kardiale_funktion": "Kardiale Funktion",
         "antiinfektiva": "Antiinfektiva",
         "diagnostik": "Diagnostik",
         "verlauf": "Verlauf",
-        "probleme_aufgaben": "Probleme/Aufgaben"
+        "probleme_aufgaben": "Probleme/Aufgaben",
+        "uebergabe": "Übergabe"
     }
     
     for key, label in field_mapping.items():

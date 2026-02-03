@@ -2,7 +2,7 @@ import flet as ft
 from data_manager import DataManager, Patient
 from typing import Callable
 
-def get_home_view(dm: DataManager, on_navigate: Callable, on_quick_add: Callable, update_sidebar: Callable):
+def get_home_view(dm: DataManager, on_navigate: Callable, on_quick_add: Callable, on_edit_uebergabe: Callable, update_sidebar: Callable):
     search_field = ft.TextField(
         label="Patient suchen...", 
         prefix_icon=ft.Icons.SEARCH,
@@ -68,6 +68,12 @@ def get_home_view(dm: DataManager, on_navigate: Callable, on_quick_add: Callable
                         icon_color=ft.Colors.GREEN,
                         tooltip="Quick Add",
                         on_click=lambda _, pid=p.id: on_quick_add(pid)
+                    ),
+                    ft.IconButton(
+                        icon=ft.Icons.EDIT_NOTE, 
+                        icon_color=ft.Colors.BLUE,
+                        tooltip="Übergabe bearbeiten",
+                        on_click=lambda _, pid=p.id: on_edit_uebergabe(pid)
                     ),
                     ft.Column([
                         ft.Text(f"{p.name} ({p.bettplatz})", size=13, weight=ft.FontWeight.BOLD),
